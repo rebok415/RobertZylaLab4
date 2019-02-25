@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Granie :)</title>
+    <script src="js/js.js"></script>
+    <link href="css/style.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <div class="keyboard">
+            <button class="key" id="1">1</button>
+            <button class="key" id="2">2</button>
+            <button class="key" id="3">3</button>
+            <button class="key" id="4">4</button>
+            <button class="key" id="5">5</button>
+            <button class="key" id="6">6</button>
+            <button class="key" id="7">7</button>
+            <button class="key" id="8">8</button>
+            <button class="key" id="9">9</button>
+            <button class="key" id="0">0</button>
+        </div>
+        <div class="records">
+            <div class="contentButton">
+                <div id="status1">Brak nagrania</div>
+                <button id="playButton1"  class="playButton" onclick="odtwarzanieNagrania(1)">Odtwórz nagranie 1</button>
+                <button class="recButton" id="rButton1" onclick="startNagrywania(1)">Nagraj utów 1</button>
+            </div>
+            <div class="contentButton">
+                <div id="status2">Brak nagrania</div>
+                <button id="playButton2" class="playButton" onclick="odtwarzanieNagrania(2)">Odtwórz nagranie 2</button>
+                <button class="recButton" id="rButton2" onclick="startNagrywania(2)">Nagraj utów 2</button>
+            </div>
+            <div class="contentButton">
+                <div id="status3">Brak nagrania</div>
+                <button id="playButton3"  class="playButton" onclick="odtwarzanieNagrania(3)">Odtwórz nagranie 3</button>
+                <button class="recButton" id="rButton3" onclick="startNagrywania(3)">Nagraj utów 3</button>
+            </div>
+            <div class="contentButton">
+                <div id="status4">Brak nagrania</div>
+                <button id="playButton4"  class="playButton" onclick="odtwarzanieNagrania(4)">Odtwórz nagranie 4</button>
+                <button class="recButton" id="rButton4" onclick="startNagrywania(4)">Nagraj utów 4</button>
+            </div>
+        </div>
+    </div>
+    <script>wczytajDzwieki();</script>
+</body>
+</html>
