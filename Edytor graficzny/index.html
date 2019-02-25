@@ -1,0 +1,153 @@
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<title>Eydtor graficzny</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<style type='text/css'>
+body {
+    font-family: sans-serif;
+
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#e1ffff+0,e1ffff+7,e1ffff+12,e1ffff+18,e6f8fd+36,e6f8fd+44,e6f8fd+47,c8eefb+54,bee4f8+75,b1d8f5+100 */
+background: #e1ffff; /* Old browsers */
+background: -moz-linear-gradient(top, #e1ffff 0%, #e1ffff 7%, #e1ffff 12%, #e1ffff 18%, #e6f8fd 36%, #e6f8fd 44%, #e6f8fd 47%, #c8eefb 54%, #bee4f8 75%, #b1d8f5 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top, #e1ffff 0%,#e1ffff 7%,#e1ffff 12%,#e1ffff 18%,#e6f8fd 36%,#e6f8fd 44%,#e6f8fd 47%,#c8eefb 54%,#bee4f8 75%,#b1d8f5 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom, #e1ffff 0%,#e1ffff 7%,#e1ffff 12%,#e1ffff 18%,#e6f8fd 36%,#e6f8fd 44%,#e6f8fd 47%,#c8eefb 54%,#bee4f8 75%,#b1d8f5 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e1ffff', endColorstr='#b1d8f5',GradientType=0 ); /* IE6-9 */
+height: 100%;
+}
+#controls {
+      padding: 20px;
+   
+    }
+    #ifloaderimg{
+        display: none;
+    }
+</style>
+<script type='text/javascript'>
+
+function loadImage() {
+        var input, file, fr, img;
+
+        if (typeof window.FileReader !== 'function') {
+            write("Plik API nie jest jeszcze obsługiwany w tej przeglądarce.");
+            return;
+        }
+
+        input = document.getElementById('imgfile');
+        if (!input) {
+            write("Um, nie mogłem znaleźć elementu imgfile.");
+        } else if (!input.files) {
+            write("Ta przeglądarka nie obsługuje właściwości plików `files`.");
+        } else if (!input.files[0]) {
+            write("Wybierz plik, zanim klikniesz 'Załaduj'");
+        } else {
+            file = input.files[0];
+            fr = new FileReader();
+            fr.onload = createImage;
+            fr.readAsDataURL(file);
+        }
+
+        function createImage() {
+            img = new Image();
+            img.onload = imageLoaded;
+            img.src = fr.result;
+        }
+
+        function imageLoaded() {
+            var canvas = document.getElementById("canvas")
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+
+
+            var sliders = ['contrast'];
+            sliders.forEach(function(attr) {
+                var slider = document.getElementById(attr);
+                function update() {
+                    document.getElementById("ifloaderimg").style.display = "block";
+                    const canvas = document.getElementById('canvas');
+                    let odejmowanaLiczba = parseInt(slider.value - 100);
+                    let liczba = (100 - odejmowanaLiczba); 
+                    canvas.style.filter = 'brightness('+liczba+'%)';
+                }
+                slider.oninput = update;
+                update();
+            });
+
+
+            ctx.drawImage(img, 0, 0);
+                    img.style.display = 'none';
+                    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    var data = imageData.data;
+
+                    var invert = function() {
+                        for (var i = 0; i < data.length; i += 4) {
+                            data[i] = 255 - data[i]; // red
+                            data[i + 1] = 255 - data[i + 1]; // green
+                            data[i + 2] = 255 - data[i + 2]; // blue
+                        }
+                        ctx.putImageData(imageData, 0, 0);
+                    };
+
+                    var restart = function() {
+                        document.getElementById("btnLoad").click();
+                    };
+
+                    var grayscale = function() {
+                        for (var i = 0; i < data.length; i += 4) {
+                            var avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                            data[i] = avg; // red
+                            data[i + 1] = avg; // green
+                            data[i + 2] = avg; // blue
+                        }
+                        ctx.putImageData(imageData, 0, 0);
+                    };
+
+                    var invertbtn = document.getElementById('invertbtn');
+                    invertbtn.addEventListener('click', invert);
+                    var grayscalebtn = document.getElementById('grayscalebtn');
+                    grayscalebtn.addEventListener('click', grayscale);
+
+                    var restartbtn = document.getElementById('restart');
+                    restartbtn.addEventListener('click', restart);
+
+        }
+
+        function write(msg) {
+            var p = document.createElement('p');
+            p.innerHTML = msg;
+            document.body.appendChild(p);
+        }
+
+    }
+
+
+
+</script>
+</head>
+<body>
+        <div class="container">
+                <div class="row">
+<form action='#' onsubmit="return false;">
+    <input type='file' id='imgfile' />
+    <input  type="button" class="btn btn-primary" type='button' id='btnLoad' value='Wczytaj' onclick='loadImage();' />
+</form>
+    <canvas id="canvas"></canvas>
+    <div id="ifloaderimg">
+    <div>
+            <input   type="button" class="btn btn-outline-primary" id="grayscalebtn" value="Grayscale" type="button">
+            <input  type="button" class="btn btn-outline-primary" id="invertbtn" value="Invert" type="button">
+            <input  type="button" class="btn btn-outline-primary" id="restart" value="Restart" type="button">
+          </div>
+    <div id="controls">
+        Przyciemnij/rozjasnij:
+        <input id="contrast" type="range" min="100" max="199" step="0.1" value="0">
+      </div>
+      <button  type="button" class="btn btn-primary"  onclick="czarnoBiale()" title="czarno białe">czarno biale</button>
+    </div>
+
+</div>
+</div>
+
+</body>
