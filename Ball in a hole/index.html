@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Gra Kulka w dziurze</title>
+<style>
+#kulka{
+position: absolute;
+height: 25px;
+width: 25px;
+background-color: rgb(252, 118, 118);
+border-radius: 50%;
+display: inline-block;
+}
+#dziurka{
+position: absolute;
+height: 30px;
+width: 30px;
+background-color: rgb(0, 0, 0);
+border-radius: 50%;
+display: inline-block;
+}
+#gra{
+display: none;
+}
+
+
+
+</style>
+</head>
+
+<body>
+<div id="przycisk">Kliknij aby zacząć</div>
+<div id="gra">
+<div class="output"></div>
+<div id="wyswietlCzas"></div>
+<div id="kulka"></div>
+<div id="dziurka"></div>
+</div>
+<script>
+// deklaracje zmiennych używanych w kodzie
+var printTimeout, lastPrintEl, szerokoscEkranu, wysokoscEkranu, czas,
+wysokoscpozycjaDziurki, szerokoscpozycjaDziurki, randomowaLiczba, randomowaLiczba1,
+dziurka, kulka, przycisk, gra, teraz;
+// przypisanie do zmiennej wysokoscEkranu wysokosci okna widocznego w urządzeniu
+wysokoscEkranu = window.innerHeight;
+szerokoscEkranu = window.innerWidth;
+// przypisanie losowych licz do zmiennych
+randomowaLiczba = Math.random();
+randomowaLiczba1 = Math.random();
+// przypisanie pozycji dziurki na podstawie wysokosci ekranu razy losowa liczba z zakresu od 0 do 1 np: 0.5
+wysokoscpozycjaDziurki = (wysokoscEkranu * randomowaLiczba);
+szerokoscpozycjaDziurki = (szerokoscEkranu * randomowaLiczba1);
+// przypisanie do zmiennej kulka, pobranie kulki z dokumentu HTML
+kulka = document.getElementById("kulka");
+// przypisanie do zmiennej dziurki, pobranie dziurki z dokumentu HTML
+dziurka = document.getElementById("dziurka");
+// przesuniecie dziurki o określoną losową liczbę od góry ekranu
+dziurka.style.top = wysokoscpozycjaDziurki + "px";
+// przesuniecie dziurki o określoną losową liczbę od lewej ekranu
+dziurka.style.left = szerokoscpozycjaDziurki + "px";
+// przypisanie do zmiennej przycisk, pobranie przycisk z dokumentu HTML
+przycisk = document.getElementById('przycisk');
+// wywołanie funkcji handleOrientation w momencie kliknięcia w przycisk
+przycisk.onclick = function handleOrientation() {
+// przypisanie do zmiennej gra, pobranie gra z dokumentu HTML
+gra = document.getElementById("gra");
+// pojazanie gry na ekranie
+gra.style.display = "block";
+// przypisanie aktualnej daty do zmiennej czas
+czas = new Date();
+};
+
+function handleOrientation(event) {
+// przypisanie do zmiennej x wartości reprezentującej ruch urządzenia wokół osi x, przedstawiany w stopniach z wartościami od -180 do 180
+var x = event.beta;
+// przypisanie do y wartości reprezentującej ruch urządzenia wokół osi Y, przedstawiany w stopniach z wartościami od -90 do 90. Przedstawia ruch od lewej do prawej urządzenia.
+var y = event.gamma;
+
+// jeśli przepresowana liczba x do całkowitej jest większa niż 10 to zmiejsz ją na 9
+// zostało to napisane żeby za szybko kulka nie skakała z góry na dół
+if(parseInt(x) > 10){
+x = 9;
+}
+// zostało to napisane żeby za szybko kulka nie skakała z dołu do góry
+if(parseInt(x) < -10){
+x = -9;
+}
+// zostało to napisane żeby za szybko kulka nie skakała z prawej do lewje
+if(parseInt(y) > 10){
+y = 9;
+}
+// zostało to napisane żeby za szybko kulka nie skakała z lewej do prawej
+if(parseInt(y) < -10){
+y = -9;
+}
+
+
+// cała logika związania z trafieniem kulki do dziurki, sprawdzanie w tym ifie pozycji kulki wzgledem dziurki
+if(((kulka.offsetTop >= parseInt(wysokoscpozycjaDziurki)) && (kulka.offsetTop <= (parseInt(wysokoscpozycjaDziurki) + (dziurka.offsetTop / 2 ) ))) && ((kulka.offsetLeft >= parseInt(szerokoscpozycjaDziurki)) && (kulka.offsetLeft <= (parseInt(szerokoscpozycjaDziurki) + (dziurka.offsetLeft / 2 ) ))) ) {
+// przypisanie do zmiennej teraz aktualnej daty i czasu
+teraz = new Date();
+// stworzenie zmiennje twoj wynik która oblicza czas jaki trwał od momentu rozpoczecia gry do zakonczenia
+var twojWynik = ((teraz - czas) / 1000);
+// skochwanie kulki do dziurki czyli kulka znika w momencia trafienia w dziurkę
+kulka.style.display = "none";
+// wyświetlenie komunikatu z informacją o koncu gry oraz czasie w jakim nam sie udało wrzucić kulke do dziurki
+if (confirm('Koniec gry twoj czas to: ' + twojWynik + 's. ' + 'Grasz jeszcze raz?')){
+// w momencie nacisineicia ok nastepuje przeładowanie strony
+window.location = window.location;
+}
+else{
+// w momecnei rezygnacji z gry zostaniemy przekeirowaniu na stronę główną google
+window.location = "http://www.google.pl";
+}
+}
+
+// sprawdzanie przesuniecie kulki względem ekranu góry i dołu strony, żeby kulka nie skakała w kółko
+if((kulka.offsetTop < (wysokoscEkranu - 11)) && (kulka.offsetTop >= 0)){
+// sprawdzanie czy pozycja kulki od góry ekranu jest większa lub równa wysokości ekranu - 20 żeby się nie zacinało
+if(kulka.offsetTop >= (wysokoscEkranu - 20)){
+// przesumoiemie kulkiu od góry strony o wysokość ekranu + 35px (żeby nie przeskakiwała)
+kulka.style.top = (wysokoscEkranu - 35) + "px";
+}
+else{
+// przeusniecie kulkiu od góry strony o aktualną pozycje kulki dodając przesunięcie erkanu czyli event.beta
+kulka.style.top = (kulka.offsetTop + x) + "px";
+}
+}
+else{
+// kulka się wieszała więc musieliśmy ją przesuwać o połowę jej wysokości od góry strony
+kulka.style.top = "11px"
+}
+// sprawdzanie przesuniecie kulki względem ekranu lewej i prawej strony, żeby kulka nie skakała w kółko
+if((kulka.offsetLeft <= szerokoscEkranu - 11) && (kulka.offsetLeft >= 0)){
+// sprawdzanie czy pozycja kulki od lewej ekranu jest większa lub równa szerokości ekranu - 20 żeby się nie zacinało
+if(kulka.offsetLeft >= (szerokoscEkranu - 20)){
+// przesumoiemie kulkiu w lewą stronę o szerokośc ekranu - 35px (żeby nie przeskakiwała)
+kulka.style.left = (szerokoscEkranu - 35) + "px";
+}
+else{
+// przeusniecie kulkiu w lewą stronę o aktualną pozycje kulki dodając przesunięcie erkanu czyli event.gamma
+kulka.style.left = (kulka.offsetLeft + y) + "px";
+}
+}
+else{
+// kulka się wieszała więc musieliśmy ją przesuwać o połowę jej szerokości od lewej strony
+kulka.style.left = "11px"
+}
+
+}
+// nasłuchiwanie ewentu odpowiedzialnego za poruszaniem telefonu
+window.addEventListener('deviceorientation', handleOrientation);
+
+</script>
+
+</body>
+</html>
