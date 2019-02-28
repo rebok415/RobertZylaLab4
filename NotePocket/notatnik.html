@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Notatnik</title>
+    <link href="https://fonts.googleapis.com/css?family=Rubik:200,300,400" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="wrapper">
+      <div class="firstNote blue">
+        <form id="form" name="form">
+          <input type="text" name="title" class="noteTitle" placeholder="Title" required>
+          <input type="text" name="description" class="noteDesc" placeholder="Descritption">
+          <footer class="noteFooter">
+            <div class="left">
+                <span class="checkboxtext">Piorytet</span> 
+                <input type="checkbox"  name="priority" value="1">
+            </div>
+            <div class="holder left">
+              <p class="left">Kolor:</p>
+                <div class="color red" onclick="changeColor(this)"></div>
+                <div class="color blue" onclick="changeColor(this)"></div>
+                <div class="color green" onclick="changeColor(this)"></div>
+                <div class="color yellow" onclick="changeColor(this)"></div>
+                <div class="color black" onclick="changeColor(this)"></div>
+            </div>
+            <div class="left">
+                <button type="reset" class="reset">RESET</button>
+              <button type="submit" class="add">Dodaj notatkę</button>
+            </div>   
+          </footer>
+        </form>
+      </div>
+    </div>
+
+    <script src="js.js"></script>
+    
+</body>
+</html>
